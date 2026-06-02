@@ -16,20 +16,22 @@ Route::post('/auth/register', [RegisterController::class, 'store'])->name('regis
 Route::get('/auth/login', [LoginController::class, 'index'])->name('login');
 Route::post('/auth/login', [LoginController::class, 'store'])->name('login.store');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect()->route('dashboard')->with('success', 'Tu correo fue verificado correctamente. Ya puedes crear presupuestos y gastos.');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect()->route('dashboard')->with('success', 'Tu correo fue verificado correctamente. Ya puedes crear presupuestos y gastos.');
+    })->middleware(['signed'])->name('verification.verify');
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware(['auth'])->name('verification.notice');
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
 
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('success', 'Se ha reenviado el correo de verificación.');
-})->middleware(['auth', 'throttle:1,1'])->name('verification.send'); //throttle:{cantidad_peticiones},{por_minuto}
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('success', 'Se ha reenviado el correo de verificación.');
+    })->middleware(['throttle:1,1'])->name('verification.send'); //throttle:{cantidad_peticiones},{por_minuto}
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware(['verified'])->name('dashboard');
+});
