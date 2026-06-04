@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\LogoutController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -34,7 +35,5 @@ Route::middleware(['auth'])->group(function () {
         return back()->with('success', 'Se ha reenviado el correo de verificación.');
     })->middleware(['throttle:1,1'])->name('verification.send'); //throttle:{cantidad_peticiones},{por_minuto}
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['verified'])->name('dashboard');
+    Route::get('/dashboard', [BudgetController::class, 'index'])->middleware(['verified'])->name('dashboard');
 });
