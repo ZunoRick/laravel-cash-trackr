@@ -35,5 +35,9 @@ Route::middleware(['auth'])->group(function () {
         return back()->with('success', 'Se ha reenviado el correo de verificación.');
     })->middleware(['throttle:1,1'])->name('verification.send'); //throttle:{cantidad_peticiones},{por_minuto}
 
-    Route::get('/dashboard', [BudgetController::class, 'index'])->middleware(['verified'])->name('dashboard');
+    Route::middleware(['verified'])->prefix('dashboard')->group(function () {
+        Route::get('/', [BudgetController::class, 'index'])->name('dashboard');
+        Route::get('/budgets/create', [BudgetController::class, 'create'])->name('budgets.create');
+        Route::post('/budgets', [BudgetController::class, 'store'])->name('budgets.store');
+    });
 });
