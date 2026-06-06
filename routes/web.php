@@ -41,5 +41,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/budgets', [BudgetController::class, 'store'])->name('budgets.store');
         Route::get('/budgets/{budget}/edit', [BudgetController::class, 'edit'])->name('budgets.edit');
         Route::put('/budgets/{budget}', [BudgetController::class, 'update'])->name('budgets.update');
+        Route::delete('/budgets/{budget}', [BudgetController::class, 'destroy'])->name('budgets.destroy');
     });
 });
