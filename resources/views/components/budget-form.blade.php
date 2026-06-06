@@ -2,7 +2,7 @@
     <label class="font-bold text-2xl" for="name">Nombre</label>
 
     <input id="name" type="text" placeholder="Nombre del Presupuesto. Ej. Boda, Casa, Graduación, Semana"
-        class="w-full border border-gray-300 p-3 rounded-lg" name="name">
+        class="w-full border border-gray-300 p-3 rounded-lg" name="name" value="{{ old('name', $budget?->name) }}">
 
     <x-input-error field="name" />
 </div>
@@ -12,7 +12,8 @@
     <label class="font-bold text-2xl" for="amount">Cantidad</label>
 
     <input id="amount" type="number" min="0" step="1" placeholder="Cantidad de Presupuesto"
-        class="w-full border border-gray-300 p-3 rounded-lg" name="amount" />
+        class="w-full border border-gray-300 p-3 rounded-lg" name="amount"
+        value="{{ old('amount', $budget?->amount) }}" />
     <x-input-error field="amount" />
 </div>
 
@@ -42,8 +43,10 @@
 
     <select name="type" class="w-full border border-gray-300 p-3 rounded-lg">
         <option value="">Tipo de Presupuesto</option>
-        <option value="general">General - Con Categorías</option>
-        <option value="goal">Proyecto</option>
+        <option value="general" {{ old('type', $budget->type->value ?? '') === 'general' ? 'selected' : '' }}>General -
+            Con Categorías</option>
+        <option value="goal" {{ old('type', $budget->type->value ?? '') === 'goal' ? 'selected' : '' }}>Proyecto
+        </option>
     </select>
 
     <x-input-error field="type" />
