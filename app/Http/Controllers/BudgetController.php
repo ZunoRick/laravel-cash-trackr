@@ -7,6 +7,7 @@ use App\Models\Budget;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Illuminate\Routing\Attributes\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 #[Middleware('auth')]
 #[Middleware('verified')]
@@ -45,7 +46,7 @@ class BudgetController extends Controller
      */
     public function show(Budget $budget)
     {
-        //
+        return Inertia::render('Budgets/Show');
     }
 
     /**
