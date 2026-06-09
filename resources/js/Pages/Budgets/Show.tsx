@@ -1,12 +1,18 @@
 import { Head } from "@inertiajs/react";
 import { Budget } from "@/types/Budget";
 import AmountDisplay from "@/components/AmountDisplay";
+import ExpenseModal from "@/components/ExpenseModal";
+import { useExpenseModalStore } from "@/stores/expense-modal-store";
 
 type Props = {
     budget: Budget;
 };
 
 export default function Show({ budget }: Props) {
+    const handleToogleModal = useExpenseModalStore(
+        (state) => state.handleToogleModal,
+    );
+
     return (
         <>
             <Head title={`Presupuesto: ${budget.name}`} />
@@ -40,6 +46,20 @@ export default function Show({ budget }: Props) {
                     <AmountDisplay label="Restante" amount={0} />
                 </div>
             </main>
+
+            <section className="p-10 lg:px-5 shadow-lg mt-10">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-3xl font-bold">Gastos</h2>
+                    <button
+                        className="bg-purple-950 hover:bg-purple-800 px-5 py-2 my-5 rounded-lg text-white font-bold text-xl cursor-pointer"
+                        onClick={handleToogleModal}
+                    >
+                        Nuevo Gasto
+                    </button>
+                </div>
+            </section>
+
+            <ExpenseModal />
         </>
     );
 }
