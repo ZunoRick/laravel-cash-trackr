@@ -18,11 +18,14 @@
     },
     "dependencies": {
         "@headlessui/react": "^2.2.10",
+        "@inertiajs/core": "^3.3.1",
         "@inertiajs/react": "^3.3.1",
         "@inertiajs/vite": "^3.3.1",
         "@vitejs/plugin-react": "^6.0.2",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
+        "react-toastify": "^11.1.0",
+        "ziggy-js": "^2.6.2",
         "zustand": "^5.0.14"
     }
 }

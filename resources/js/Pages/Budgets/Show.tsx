@@ -1,17 +1,31 @@
-import { Head } from "@inertiajs/react";
-import { Budget } from "@/types/Budget";
+import { Head, usePage } from "@inertiajs/react";
+import { ToastContainer, toast } from "react-toastify";
+import type { Budget } from "@/types/Budget";
+import type { Category } from "@/types/Category";
 import AmountDisplay from "@/components/AmountDisplay";
 import ExpenseModal from "@/components/ExpenseModal";
 import { useExpenseModalStore } from "@/stores/expense-modal-store";
+import { useEffect } from "react";
 
 type Props = {
     budget: Budget;
+    categories: Category[];
 };
 
-export default function Show({ budget }: Props) {
+export default function Show({ budget, categories }: Props) {
+    const { flash } = usePage().props;
+
     const handleToogleModal = useExpenseModalStore(
         (state) => state.handleToogleModal,
     );
+    useExpenseModalStore.getState().setBudget(budget);
+    useExpenseModalStore.getState().setCategories(categories);
+
+    useEffect(() => {
+        if (flash.success) {
+            toast.success(flash.success);
+        }
+    }, [flash]);
 
     return (
         <>
@@ -60,6 +74,7 @@ export default function Show({ budget }: Props) {
             </section>
 
             <ExpenseModal />
+            <ToastContainer />
         </>
     );
 }
