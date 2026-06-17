@@ -1,19 +1,22 @@
-import { Head, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { Head, usePage } from "@inertiajs/react";
 import type { Budget } from "@/types/Budget";
 import type { Category } from "@/types/Category";
 import AmountDisplay from "@/components/AmountDisplay";
 import ExpenseModal from "@/components/ExpenseModal";
 import { useExpenseModalStore } from "@/stores/expense-modal-store";
-import { useEffect } from "react";
 import { formatCurrency, formatDate } from "@/utils";
+import ProgressBar from "@/components/ProgressBar";
 
 type Props = {
     budget: Budget;
     categories: Category[];
+    spent: string;
 };
 
-export default function Show({ budget, categories }: Props) {
+export default function Show({ budget, categories, spent }: Props) {
+    const [progress, setProgress] = useState(0);
     const { flash } = usePage().props;
 
     const handleToogleModal = useExpenseModalStore(
@@ -21,6 +24,17 @@ export default function Show({ budget, categories }: Props) {
     );
     useExpenseModalStore.getState().setBudget(budget);
     useExpenseModalStore.getState().setCategories(categories);
+
+    const percentageUsed = ((+spent / +budget.amount) * 100).toFixed(2);
+    const remaining = +budget.amount - +spent;
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setProgress(+percentageUsed);
+        }, 100);
+
+        return () => clearTimeout(timeout);
+    }, [percentageUsed]);
 
     useEffect(() => {
         if (flash.success) {
@@ -52,13 +66,14 @@ export default function Show({ budget, categories }: Props) {
             </section>
 
             <main className="grid grid-cols-1 md:grid-cols-2 items-center gap-20 mt-10">
+                <ProgressBar percentageUsed={progress} />
                 <div className="space-y-5">
                     <AmountDisplay
                         label="Presupuesto"
                         amount={+budget.amount}
                     />
-                    <AmountDisplay label="Gastado" amount={0} />
-                    <AmountDisplay label="Restante" amount={0} />
+                    <AmountDisplay label="Gastado" amount={+spent} />
+                    <AmountDisplay label="Restante" amount={remaining} />
                 </div>
             </main>
 
@@ -75,7 +90,7 @@ export default function Show({ budget, categories }: Props) {
 
                 {budget.expenses.length ? (
                     <div className="mt-8 flow-root ">
-                        <div className=" ring-1 ring-gray-300 rounded-lg ">
+                        <div className="ring-1 ring-gray-300 rounded-lg">
                             <div className="inline-block min-w-full align-middle">
                                 <table className="relative min-w-full">
                                     <thead>
