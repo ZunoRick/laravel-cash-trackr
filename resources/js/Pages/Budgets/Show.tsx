@@ -8,6 +8,7 @@ import ExpenseModal from "@/components/ExpenseModal";
 import { useExpenseModalStore } from "@/stores/expense-modal-store";
 import { formatCurrency, formatDate } from "@/utils";
 import ProgressBar from "@/components/ProgressBar";
+import ExpenseDropdown from "@/components/ExpenseDropdown";
 
 type Props = {
     budget: Budget;
@@ -141,7 +142,9 @@ export default function Show({ budget, categories, spent }: Props) {
                                                         )}
                                                     </p>
                                                 </td>
-                                                <td className="py-6 px-10 flex justify-end gap-3"></td>
+                                                <td className="py-6 px-10 flex justify-end gap-3">
+                                                    <ExpenseDropdown expense={expense}/>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

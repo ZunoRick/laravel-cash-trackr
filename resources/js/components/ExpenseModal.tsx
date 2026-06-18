@@ -3,21 +3,20 @@ import {
     Dialog,
     DialogBackdrop,
     DialogPanel,
-    DialogTitle,
 } from "@headlessui/react";
 import ExpenseForm from "./ExpenseForm";
 
 export default function ExpenseModal() {
     const open = useExpenseModalStore((state) => state.open);
-    const handleToogleModal = useExpenseModalStore(
-        (state) => state.handleToogleModal,
+    const closeModal = useExpenseModalStore(
+        (state) => state.closeModal,
     );
 
     return (
         <div>
             <Dialog
                 open={open}
-                onClose={handleToogleModal}
+                onClose={closeModal}
                 className="relative z-10"
             >
                 <DialogBackdrop
@@ -31,13 +30,6 @@ export default function ExpenseModal() {
                             transition
                             className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-2xl sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95"
                         >
-                            <DialogTitle
-                                as="h3"
-                                className="text-4xl font-black mt-10 text-center"
-                            >
-                                Nuevo Gasto
-                            </DialogTitle>
-
                             <ExpenseForm />
                         </DialogPanel>
                     </div>
